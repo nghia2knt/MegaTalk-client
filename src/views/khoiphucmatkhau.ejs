@@ -24,22 +24,20 @@
       type="text/javascript"
       src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"
     ></script>
-    <script type="text/javascript" src="./js/api.js"></script>
-    <script type="text/javascript" src="./js/dangnhap.js"></script>
-    <link rel="stylesheet" href="../css/style.css" />
-    <title>Đăng nhập</title>
+    <script type="text/javascript" src="./controller/api.js"></script>
+    <script
+      type="text/javascript"
+      src="./controller/khoiphucmatkhau.js"
+    ></script>
+    <title>Khôi phục mật khẩu</title>
   </head>
   <body>
-    <div class="container content">
+    <div class="container">
       <div class="row">
         <div class="col-md-4 offset-md-4">
           <div class="login-form bg-light mt-4 p-4">
-            <form
-              class="row g-3"
-              id="formDangNhap"
-              onsubmit="return dangNhap()"
-            >
-              <h4 class="textCenter">Nhập thông tin</h4>
+            <form class="row g-3" id="form" onsubmit="return resetPassword()">
+              <h4>Khôi phục mật khẩu</h4>
               <div class="col-12">
                 <label>Tài khoản</label>
                 <input
@@ -49,9 +47,22 @@
                   class="form-control"
                   placeholder="Tài khoản"
                   onclick="clean()"
+                  value=""
                 />
-                <i id="err1" style="color: red; font-size: 13px"></i>
               </div>
+
+              <div class="col-12">
+                <label>Code</label>
+                <input
+                  id="txtcode"
+                  type="text"
+                  name="code"
+                  class="form-control"
+                  placeholder="Code"
+                  onclick="clean()"
+                />
+              </div>
+
               <div class="col-12">
                 <label>Mật khẩu </label>
                 <input
@@ -62,7 +73,7 @@
                   placeholder="Mật khẩu"
                   onclick="clean()"
                 />
-                <i id="err2" style="color: red; font-size: 13px"></i>
+
                 <p
                   id="err"
                   style="color: red; font-size: 13px; text-align: center"
@@ -70,14 +81,12 @@
               </div>
 
               <div class="col-12 text-center">
-                <button type="submit" class="btn btn-success">Đăng nhập</button>
+                <button type="submit" class="btn btn-dark">Xác nhận</button>
               </div>
             </form>
             <hr class="mt-4" />
             <div class="col-12">
-              <p class="text-center">
-                <a href="/quenmatkhau">Quên mật khẩu?</a>
-              </p>
+              <p class="text-center"><a href="/dangnhap">Về trang chủ</a></p>
             </div>
             <div class="col-12">
               <p class="text-center">
@@ -93,5 +102,12 @@
         </div>
       </div>
     </div>
+
+    <style>
+      .error {
+        color: #f00;
+        font-size: 13px;
+      }
+    </style>
   </body>
 </html>

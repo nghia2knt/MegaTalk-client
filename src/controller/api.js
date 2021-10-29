@@ -9,7 +9,9 @@ const endpoint = {
     addFriend: "/api/auth/addfriend",
     sendMessByRoomID: "/api/chat/sendmessbyroomid",
     uploadfile: "/api/chat/uploadfile",
-    updateProfile: "/api/auth/updateprofile"
+    updateProfile: "/api/auth/updateprofile",
+    findUser: "/api/auth/finduserbyusername",
+    findMultiUser: "/api/auth/findmultiuserbyusername"
 }
 const host = "http://localhost:3102";
 const hostsocket = "http://localhost:3103";

@@ -95,8 +95,14 @@ function getALL() {
       },
       success: function (data) {
         // thông tin
-        var avatar = document.getElementById("avatar");
-        avatar.src = data.data.avatar;
+        if (data.data.avatar==""){
+          var avatar = document.getElementById("avatar");
+          avatar.src = "./asset/image/defaultAvatar.jpg";
+        }else{ 
+          var avatar = document.getElementById("avatar");
+          avatar.src = data.data.avatar;
+        }
+       
 
         var username = document.getElementById("username");
         username.innerHTML = data.data.username;
@@ -164,6 +170,9 @@ function dangXuat() {
 }
 
 function getUploadFile() {
+  if (document.getElementById('avatarUpdate').value==""){
+    getUpdateMain("");
+  }else
   {
     var formData = new FormData();
     formData.append("filename", $('input[name="avatarUpdate"]')[0].files[0]);
@@ -180,7 +189,7 @@ function getUploadFile() {
         }
       },
       success: function (data) {
-        getUpdateAvatar(data.data);
+        getUpdateMain(data.data);
       },
       error: function (e) {
         alert(e.responseJSON);
@@ -189,7 +198,7 @@ function getUploadFile() {
   }
 }
 
-function getUpdateAvatar(linkAvatarT) {
+function getUpdateMain(linkAvatarT) {
   {
     $.ajax({
       type: "GET",
@@ -202,17 +211,16 @@ function getUpdateAvatar(linkAvatarT) {
         }
       },
       success: function (data) {
-        var nameT = data.data.name;
-        var birthDayT = data.data.birthDay;
+        var nameT = $('input[name="nameUpdate"]').val();
+        var birthDayT = $('input[name="birthDayUpdate"]').val();
         var gennderT = parseInt(data.data.gennder.toString());
-        var data = JSON.stringify({
-          name: nameT,
-          birthDay: birthDayT,
-          gennder: gennderT,
-          avatar: linkAvatarT,
-          background: "",
-        });
-        console.log(data);
+       
+        if (linkAvatarT == ""){
+          var avatarT = data.data.avatar;
+        }else{
+          var avatarT = linkAvatarT;
+        }
+        
 
         $.ajax({
           type: "POST",
@@ -221,7 +229,7 @@ function getUpdateAvatar(linkAvatarT) {
             name: nameT,
             birthDay: birthDayT,
             gennder: gennderT,
-            avatar: linkAvatarT,
+            avatar: avatarT,
             background: "",
           }),
           beforeSend: function (xhr) {
@@ -246,6 +254,32 @@ function getUpdateAvatar(linkAvatarT) {
   }
 }
 
+
+
+
+function getInfoUpdate() {
+  {
+      $.ajax({
+        type: 'GET',
+        url:  host + endpoint.getProfileUser,
+        beforeSend: function(xhr) {
+          if (localStorage.token) {
+            xhr.setRequestHeader('jwt', localStorage.token);
+          }
+        },
+        success: function(data) {
+          document.getElementById('nameUpdate').value=data.data.name;
+          document.getElementById('birthDayUpdate').value=data.data.birthDay;
+          
+        },
+        error: function(e) {
+          window.location.href = "/dangnhap";
+        }
+        
+        
+      });
+  };
+};
 $(function () {
   getALL();
 });

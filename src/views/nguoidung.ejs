@@ -30,6 +30,7 @@
     <script type="text/javascript" src="./controller/api.js"></script>
     <script type="text/javascript" src="./controller/nguoidung.js"></script>
     <link rel="stylesheet" href="../style/style.css" />
+    <link rel="stylesheet" href="../style/logo.css" />
     <title>Người dùng</title>
   </head>
   <body>
@@ -123,10 +124,32 @@
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onclick=""
               ></button>
             </div>
             <div class="modal-body" id="modalBody">
-              <div class="row gutters"></div>
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  <h6 class="mb-2">Tên người dùng:</h6>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nameUpdate"
+                    name="nameUpdate"
+                  />
+                </div>
+              </div>
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  <h6 class="mb-2">Ngày sinh:</h6>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="birthDayUpdate"
+                    name="birthDayUpdate"
+                  />
+                </div>
+              </div>
               <div class="row gutters">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                   <h6 class="mb-2">Avatar:</h6>
@@ -135,6 +158,7 @@
                     class="form-control"
                     id="avatarUpdate"
                     name="avatarUpdate"
+                    accept="image/*"
                   />
                 </div>
               </div>
@@ -179,7 +203,8 @@
               data-bs-placement="right"
               data-bs-original-title="Icon-only"
             >
-              <h2>MegaTalk</h2>
+            <img  src="./asset/image/Logo.png" alt="Trang chủ" name="logo" class="logo">
+
             </a>
             <ul
               class="
@@ -192,64 +217,65 @@
                 w-100
                 px-3
                 align-items-center
+                
               "
             >
               <li class="nav-item">
                 <a
                   href="/"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   data-bs-original-title="Home"
                 >
                   <i class="bi-house fs-1"></i>
-                  <p>Trang Chủ</p>
+                 
                 </a>
               </li>
               <li>
                 <a
                   href="/chat"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   data-bs-original-title="Room"
                 >
                   <i class="bi-chat fs-1"></i>
-                  <p>Phòng Chat</p>
+                 
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
                   onclick="return getStater()"
                 >
                   <i class="bi-plus-circle fs-1"></i>
-                  <p>Tin Nhắn Mới</p>
+                 
                 </a>
               </li>
               <li>
                 <a
                   href="/nguoidung"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   data-bs-original-title="User"
                 >
                   <i class="bi-person-circle fs-1"></i>
-                  <p>Người Dùng</p>
+                  
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
@@ -257,7 +283,7 @@
                   onclick="dangXuat()"
                 >
                   <i class="bi-chevron-double-left fs-1"></i>
-                  <p>Đăng Xuất</p>
+                 
                 </a>
               </li>
             </ul>
@@ -315,7 +341,7 @@
                             id="update"
                             name="update"
                             class="btn btn-link"
-                            onclick=""
+                            onclick="return getInfoUpdate()"
                             data-bs-toggle="modal"
                             data-bs-target="#updateProfileModal"
                           >
@@ -384,6 +410,7 @@
                         </div>
                       </div>
                     </div>
+                    <br>
                     <div class="row gutters">
                       <div
                         class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"

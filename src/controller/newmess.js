@@ -1,6 +1,6 @@
 function getStater() {
     {
-        document.getElementById('newMess').value="";
+        document.getElementById('newMess').value="Xin chào, hãy bắt đầu một tin nhắn.";
         $.ajax({
           type: 'GET',
           url:  host + endpoint.getProfileUser,

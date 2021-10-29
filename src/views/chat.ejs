@@ -35,6 +35,8 @@
 
     <script type="text/javascript" src="./controller/api.js"></script>
     <script type="text/javascript" src="./controller/chat.js"></script>
+    <link rel="stylesheet" href="../style/logo.css" />
+    <link rel="stylesheet" href="../style/logo.css" />
     <title>Chat</title>
     <style>
       .table-responsive,
@@ -149,7 +151,8 @@
               data-bs-placement="right"
               data-bs-original-title="Icon-only"
             >
-              <h2>MegaTalk</h2>
+            <img  src="./asset/image/Logo.png" alt="Trang chủ" name="logo" class="logo">
+
             </a>
             <ul
               class="
@@ -162,64 +165,65 @@
                 w-100
                 px-3
                 align-items-center
+                
               "
             >
               <li class="nav-item">
                 <a
                   href="/"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   data-bs-original-title="Home"
                 >
                   <i class="bi-house fs-1"></i>
-                  <p>Trang Chủ</p>
+                 
                 </a>
               </li>
               <li>
                 <a
                   href="/chat"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   data-bs-original-title="Room"
                 >
                   <i class="bi-chat fs-1"></i>
-                  <p>Phòng Chat</p>
+                 
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
                   onclick="return getStater()"
                 >
                   <i class="bi-plus-circle fs-1"></i>
-                  <p>Tin Nhắn Mới</p>
+                 
                 </a>
               </li>
               <li>
                 <a
                   href="/nguoidung"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   data-bs-original-title="User"
                 >
                   <i class="bi-person-circle fs-1"></i>
-                  <p>Người Dùng</p>
+                  
                 </a>
               </li>
               <li>
                 <a
                   href="#"
-                  class="nav-link py-3 px-2"
+                  class="nav-link py-3 px-2 iconHV"
                   title=""
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
@@ -227,7 +231,7 @@
                   onclick="dangXuat()"
                 >
                   <i class="bi-chevron-double-left fs-1"></i>
-                  <p>Đăng Xuất</p>
+                 
                 </a>
               </li>
             </ul>
@@ -248,7 +252,35 @@
                     <tr>
                       <th scope="col">Phòng Chat</th>
                     </tr>
+                    <tr>
+                     
+                      <td >
+                        <form onsubmit="" style="height: 35px;" >
+                          <div class="input-group" >
+                            <a
+                              href="#"
+                              title=""
+                              data-bs-toggle="modal"
+                              data-bs-target="#exampleModal"
+                              onclick="return getStater()" 
+                              class="iconHV" 
+                              >
+                              <i class="bi bi-pencil-square fs-4"></i>
+                            </a>
+                            &nbsp
+                            &nbsp
+                            <input type = "input" class="form-control rounded" placeholder="Tìm kiếm phòng chat" style="height: 35px;">
+                            <input type = "submit" hidden>    
+                          </div>
+                        </form>
+                       
+                      </td>
+                    </tr>
                   </thead>
+                  <tr>
+                    
+                    
+                  </tr>
                   <tbody id="tableRoom"></tbody>
                 </table>
               </div>
@@ -294,7 +326,7 @@
                             type="submit"
                             name="commit"
                             value="Gửi"
-                            class="btn btn-primary"
+                            class="btn btn-primary "
                             data-disable-with="Gửi"
                           />
                         </span>

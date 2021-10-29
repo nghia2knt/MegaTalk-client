@@ -66,8 +66,6 @@ function getALL() {
         var chatsListMain = data.data.chatsList.filter(
           (e) => e.roomID == roomChatID
         )[0];
-
-
         if (chatsListMain.roomName == null) {
           var roomname = "Chưa đặt tên";
         } else {
@@ -76,52 +74,51 @@ function getALL() {
         var d = 0;
         document.getElementById("roomName").innerHTML = roomname;
 
-        // search info member
-        const memberList = chatsListMain.member;
-        var arrUser = [];
-        for (var i in memberList){
-           arrUser.push(memberList[i].username) 
-        }
-        var memberListInfo = [];
-        getMultiUser(arrUser).then(
-          (value)=>{
-            memberListInfo=value;
-            
-            const messagesList = chatsListMain.messagesList;
-            document.getElementById("tableChatbox").innerHTML = "";
+        const messagesList = chatsListMain.messagesList;
+        document.getElementById("tableChatbox").innerHTML = "";
+        
+        
+      //  const rMess = messagesList.reverse();
+       
+          (async () => {
             for (var i in messagesList) {
-              const obj = memberListInfo.data.filter(
-                (e) => e.username == messagesList[i].sender
-              )[0];
-              if (obj.avatar == "")
-                  obj.avatar = "./asset/image/defaultAvatar.jpg"; 
               d++;
-              document.getElementById("tableChatbox").innerHTML +=
-              '<tr class="messenger"><td style="height:100px;width:100px;text-align: center;vertical-align: middle;">'+
-              '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td class="p-4">' +
-              '<p class="text-start fw-bold">' +
-              obj.name+
-              "</p>" +
-              '<p class="text-start">' +
-              messagesList[i].content +
-              "</p>" +
-              '<p class="text-start fw-lighter">' +
-              maskDate(messagesList[i].createAt) +
-              "</p>" +
-              "</td></tr>";
+            try {
+                var info = await getInfoToChat(messagesList[i].sender);
+                if (info.avatar == "")
+                  info.avatar = "./asset/image/defaultAvatar.jpg"; 
+
+                document.getElementById("tableChatbox").innerHTML +=
+                '<tr class="messenger"><td style="height:100px;width:100px;text-align: center;vertical-align: middle;">'+
+                '<img src="'+info.avatar+'" alt="Avatar" class="avatar"></td><td class="p-4">' +
+                '<p class="text-start fw-bold">' +
+                info.name+
+                "</p>" +
+                '<p class="text-start">' +
+                messagesList[i].content +
+                "</p>" +
+                '<p class="text-start fw-lighter">' +
+                maskDate(messagesList[i].createAt) +
+                "</p>" +
+                "</td></tr>";
+                $("#myMessageContainer")
+                .stop()
+                .animate({
+                  scrollTop: $("#myMessageContainer")[0].scrollHeight,
+                });
+              
+            } catch (e) {
+                // Deal with the fact the chain failed
             }
-            $("#myMessageContainer")
-            .stop()
-            .animate({
-            scrollTop: $("#myMessageContainer")[0].scrollHeight,
-          });
-
           }
-        );
-
-        
-
-        
+          
+       
+        })();
+          
+          
+         
+      
+       
       },
       error: function () {
         window.location.href = "/dangnhap";
@@ -132,6 +129,7 @@ function getALL() {
 
 function socketUp() {
   socket.on(`${localStorage.username}`, function (msg) {
+    console.log(msg);
     getALL();
   });
 }
@@ -144,7 +142,7 @@ function sendMess() {
   var content = $('input[name="messArea"]').val();
   var roomID = roomChatID;
   document.getElementById("messArea").value = "";
-
+/*
   document.getElementById("tableChatbox").innerHTML +=
     '<tr class="messenger"><td class="p-4">' +
     '<p class="text-start fw-lighter">' +
@@ -153,12 +151,13 @@ function sendMess() {
     '<p class="text-start">' +
     content +
     "</p>" +
-    "</td></tr>";
+    "</td></tr>"; */
   $("#myMessageContainer")
     .stop()
     .animate({
       scrollTop: $("#myMessageContainer")[0].scrollHeight,
     });
+   
   if (content != "") {
     $.ajax({
       type: "POST",
@@ -194,21 +193,48 @@ function dangXuat() {
   }
 }
 
-function getInfo(username) {
-  var info = {
-    name: "",
-    avatar: "",
-  };
+async function getInfoToChat(username) {
+  try{
+    const info = await getInfo(username);
+    const result = {
+      name: info.data.name,
+      avatar: info.data.avatar
+    }
+    return result;
+  }catch(err){
 
-  return info;
+  }
+ 
+}
+
+function getInfo(username){
+  return $.ajax({
+    type: "POST",
+    url: host + endpoint.findUser,
+    data: JSON.stringify({
+      "usernameFind":username
+    }),
+    //async: false,
+    beforeSend: function (xhr) {
+      if (localStorage.token) {
+        xhr.setRequestHeader("jwt", localStorage.token);
+      }
+    },
+    error: function (e) {
+      alert(e.responseJSON);
+    },
+    success: function (data) {
+    },
+    dataType: "json",
+    contentType: "application/json",
+  });
 }
 
 
 function getMultiUser(list){
-
   return $.ajax({
     type: "POST",
-    url: host + endpoint.findMultiUser,
+    url: host + endpoint.findUser,
     data: JSON.stringify({
       "listUser":list
     }),

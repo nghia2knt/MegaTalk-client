@@ -36,7 +36,7 @@
     <script type="text/javascript" src="./controller/api.js"></script>
     <script type="text/javascript" src="./controller/chat.js"></script>
     <link rel="stylesheet" href="../style/logo.css" />
-    <link rel="stylesheet" href="../style/logo.css" />
+    <link rel="stylesheet" href="../style/style.css" />
     <title>Chat</title>
     <style>
       .table-responsive,
@@ -48,9 +48,38 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        max-width: 300px;
+        max-width: 260px;
+      }
+      .table-responsive2 {
+        max-height: 300px;
+        overflow: auto;
+
       }
       .avatar {
+        vertical-align: middle;
+        width: 70px;
+        height: 70px;
+        background-size: cover;
+        background-position: top center;
+        border-radius: 50%;
+      }
+      .avatar2 {
+        vertical-align: middle;
+        width: 70px;
+        height: 70px;
+        background-size: cover;
+        background-position: top center;
+        border-radius: 50%;
+      }
+      .avatar3 {
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        background-size: cover;
+        background-position: top center;
+        border-radius: 50%;
+      }
+      .avatar4 {
         vertical-align: middle;
         width: 100px;
         height: 100px;
@@ -58,6 +87,32 @@
         background-position: top center;
         border-radius: 50%;
       }
+      .triangle-obtuse {
+      position:relative;
+      padding:15px;
+      color:rgb(0, 0, 0);
+      background:#f0f0f0;
+      /* css3 */
+      background:-webkit-gradient(linear, 0 0, 0 100%, from(#f0f0f0), to(#ffffff));
+      background:-moz-linear-gradient(#f0f0f0, #ffffff);
+      background:-o-linear-gradient(#f0f0f0, #ffffff);
+      background:linear-gradient(#f0f0f0, #ffffff);
+      -webkit-border-radius:10px;
+      -moz-border-radius:10px;
+      border-radius:10px;
+}
+.triangle-obtuse.right {
+  margin-right:50px;
+  background:#f0f0f0;
+}
+.triangle-obtuse.left {
+  margin-left:50px;
+  background:#24C0A1;
+  color:white;
+}
+.imgUpload:hover{
+  color:#24C0A1;
+}
     </style>
   </head>
   <body>
@@ -132,6 +187,179 @@
           </div>
         </div>
       </div>
+
+      <div
+      class="modal fade"
+      id="infoChatModal"
+      tabindex="-1"
+      aria-labelledby="infoChatModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoChatModalLabel">Thông tin phòng chat</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="modalBody">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 " id = "infoChatNameHeader">
+               <form class="input-group">
+                <input
+                type="text"
+                class="form-control"
+                id="infoChatName"
+                name="infoChatName"
+                />
+                <button
+                type="button"
+                class="btn btn-primary"
+                onclick=""
+                data-bs-dismiss="modal"
+                >
+                Lưu
+              </button>
+               </form>
+                
+              </div>
+            </div>
+           
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h6 class="mb-2">Thành viên:</h6>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"></div>
+              <div class="panel-body table-responsive2">
+                <table class="table" id="tableMemberMD">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableMemberBodyMD"></tbody>
+                </table>
+              </div>
+            </div>
+            
+          </div>
+         
+          <div class="modal-footer">
+            <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          
+            >
+            Rời khỏi phòng
+            </button>
+            <button
+            type="button"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+            style = "margin-right: auto;"
+            >
+            Xóa phòng
+          </button>
+          
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+    class="modal fade"
+    id="infoAnotherModal"
+    tabindex="-1"
+    aria-labelledby="infoAnotherModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoAnotherModalLabel">Thông tin người dùng</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 " id = "infoAnotherNameHeader">
+              <img
+              src=""
+              alt="Avatar"
+              class="avatar4"
+              id="avatarInfo"
+              name="avatarInfo"
+            />
+              <br />
+              <br>
+              <p>
+                <label class="fw-bold">Tên: &emsp;</label
+                ><label id="nameInfo"></label>
+              </p>
+              <p>
+                <label class="fw-bold">Tài khoản: &emsp;</label
+                ><label id="usernameInfo"></label>
+              </p>
+
+              <p>
+                <label class="fw-bold">Giới tính: &emsp;</label
+                ><label id="gennderInfo"></label>
+              </p>
+              <p>
+                <label class="fw-bold">Ngày sinh: &emsp;</label
+                ><label id="birthDayInfo"></label>
+              </p>
+              <p>
+                <label class="fw-bold">Email: &emsp;</label
+                ><label id="emailInfo"></label>
+              </p>
+              
+            </div>
+          </div>
+         
+        
+          
+        </div>
+       
+        <div class="modal-footer" id = "btnThemBan">
+          <button 
+         
+          type="button"
+          class="btn btn-primary"
+         
+          >
+          Thêm bạn
+          </button>
+        
+       
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
       <div class="row">
         <div class="col-sm-auto bg-light sticky-top">
           <div
@@ -246,36 +474,30 @@
                 border
               "
             >
+            <br>
+            <h4><form onsubmit="" style="height: 35px;" >
+              <div class="input-group" >
+                <a
+                  href="#"
+                  title=""
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  onclick="return getStater()" 
+                  class="iconHV" 
+                  >
+                  <i class="bi bi-pencil-square fs-4"></i>
+                </a>
+                &nbsp
+                &nbsp
+                <input type = "input" id="searchRoomInput" class="form-control rounded" placeholder="Tìm kiếm phòng chat" style="height: 35px;">
+              
+              </div>
+            </form></h4>
+              <hr />
               <div class="panel-body table-responsive">
                 <table class="table" id="tableRoomChat">
                   <thead>
-                    <tr>
-                      <th scope="col">Phòng Chat</th>
-                    </tr>
-                    <tr>
-                     
-                      <td >
-                        <form onsubmit="" style="height: 35px;" >
-                          <div class="input-group" >
-                            <a
-                              href="#"
-                              title=""
-                              data-bs-toggle="modal"
-                              data-bs-target="#exampleModal"
-                              onclick="return getStater()" 
-                              class="iconHV" 
-                              >
-                              <i class="bi bi-pencil-square fs-4"></i>
-                            </a>
-                            &nbsp
-                            &nbsp
-                            <input type = "input" class="form-control rounded" placeholder="Tìm kiếm phòng chat" style="height: 35px;">
-                            <input type = "submit" hidden>    
-                          </div>
-                        </form>
-                       
-                      </td>
-                    </tr>
+                 
                   </thead>
                   <tr>
                     
@@ -293,7 +515,23 @@
                 border
               "
             >
-              <h4 id="roomName"></h4>
+            
+              <form onsubmit="" style="height: 35px;" >
+                <div class="input-group" >
+                  <h4 id="roomName"></h4>
+                  <a
+                    href="#"
+                    title=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoChatModal"
+                    onclick="return getStaterForInfoChat()" 
+                    class="iconHV" 
+                    style="margin-left: auto;"
+                    >
+                    <i class="bi bi-info-circle fs-4"></i>
+                  </a>
+                </div>
+              </form>
               <hr />
               <div
                 class="panel-body table-responsive h-100"
@@ -312,6 +550,16 @@
                   <div class="col-md-12">
                     <form onsubmit="return sendMess()" autocomplete="off">
                       <div class="input-group">
+                      
+                        <input  class="bi  bi-play-circle fs-4 imgUpload"  id="videoUpload"  name = "videoUpload" type="file" style="width:24px;"  accept="video/*"/>
+                        &nbsp
+                        &nbsp
+                        <input  class="bi bi-file-image fs-4 imgUpload"  id="imageUpload"  name = "imageUpload" type="file" style="width:24px;"  accept="image/*"/>
+                       
+                        &nbsp
+                      
+                        
+                        &nbsp
                         <input
                           type="text"
                           id="messArea"
@@ -335,6 +583,9 @@
                   </div>
                 </div>
               </div>
+
+              
+
             </div>
           </div>
         </div>

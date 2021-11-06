@@ -27,11 +27,26 @@
       type="text/javascript"
       src="https://code.jquery.com/jquery-2.1.1.min.js"
     ></script>
+    <script
+    src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+    integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+    crossorigin="anonymous"
+  ></script>
     <script type="text/javascript" src="./controller/api.js"></script>
     <script type="text/javascript" src="./controller/nguoidung.js"></script>
     <link rel="stylesheet" href="../style/style.css" />
     <link rel="stylesheet" href="../style/logo.css" />
     <title>Người dùng</title>
+    <style>
+      .avatar2 {
+        vertical-align: middle;
+        width: 70px;
+        height: 70px;
+        background-size: cover;
+        background-position: top center;
+        border-radius: 50%;
+      }
+    </style>
   </head>
   <body>
     <div class="container-fluid">
@@ -183,7 +198,157 @@
           </div>
         </div>
       </div>
-
+      <div
+      class="modal fade"
+      id="infoAnotherModal"
+      tabindex="-1"
+      aria-labelledby="infoAnotherModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoAnotherModalLabel">Thông tin người dùng</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="modalBody">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 " id = "infoAnotherNameHeader">
+                <img
+                src=""
+                alt="Avatar"
+                class="avatar"
+                id="avatarInfo"
+                name="avatarInfo"
+              />
+                <br />
+                <br>
+                <p>
+                  <label class="fw-bold">Tên: &emsp;</label
+                  ><label id="nameInfo"></label>
+                </p>
+                <p>
+                  <label class="fw-bold">Tài khoản: &emsp;</label
+                  ><label id="usernameInfo"></label>
+                </p>
+  
+                <p>
+                  <label class="fw-bold">Giới tính: &emsp;</label
+                  ><label id="gennderInfo"></label>
+                </p>
+                <p>
+                  <label class="fw-bold">Ngày sinh: &emsp;</label
+                  ><label id="birthDayInfo"></label>
+                </p>
+                <p>
+                  <label class="fw-bold">Email: &emsp;</label
+                  ><label id="emailInfo"></label>
+                </p>
+                
+              </div>
+            </div>
+           
+          
+            
+          </div>
+         
+          <div class="modal-footer" id = "btnThemBan">
+            <button 
+           
+            type="button"
+            class="btn btn-primary"
+           
+            >
+            Thêm bạn
+            </button>
+          
+         
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+    class="modal fade"
+    id="changePasswordModal"
+    tabindex="-1"
+    aria-labelledby="changePassModal"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePassModal">
+            Thay đổi mật khẩu
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            onclick=""
+          ></button>
+        </div>
+        <div class="modal-body" id="changePassModalBody">
+          <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <h6 class="mb-2">Mật khẩu hiện tại:</h6>
+              <input
+                type="password"
+                class="form-control"
+                id="oldPassword"
+                name="oldPassword"
+              />
+            </div>
+          </div>
+          <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <h6 class="mb-2">Mật khẩu mới:</h6>
+              <input
+                type="password"
+                class="form-control"
+                id="newPassword"
+                name="newPassword"
+              />
+            </div>
+          </div>
+          <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <h6 class="mb-2">Nhập lại mật khẩu mới:</h6>
+              <input
+              type="password"
+              class="form-control"
+              id="newPassword2"
+              name="newPassword2"
+            />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Đóng
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick=""
+            data-bs-dismiss="modal"
+          >
+            Lưu
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
       <div class="row">
         <div class="col-sm-auto bg-light sticky-top">
           <div
@@ -350,11 +515,14 @@
                         </p>
                         <p>
                           <button
-                            type="button"
-                            id="update"
-                            name="update"
-                            class="btn btn-link"
-                            onclick=""
+                          type="button"
+                          id="updatePass"
+                          name="updatePass"
+                          class="btn btn-link"
+                          onclick=""
+                          data-bs-toggle="modal"
+                          data-bs-target="#changePasswordModal"
+                           
                           >
                             Thay đổi mật khẩu
                           </button>
@@ -424,9 +592,9 @@
                         <table class="table" id="tableFriends">
                           <thead>
                             <tr>
-                              <th scope="col">STT</th>
-                              <th scope="col">Tên tài khoản</th>
-                              <th scope="col">Tác vụ</th>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
                             </tr>
                           </thead>
                           <tbody id="tableFriendsBody"></tbody>
@@ -446,9 +614,9 @@
                         <table class="table" id="tableRequest">
                           <thead>
                             <tr>
-                              <th scope="col">STT</th>
-                              <th scope="col">Tên tài khoản</th>
-                              <th scope="col">Tác vụ</th>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
                             </tr>
                           </thead>
                           <tbody id="tableRequestBody"></tbody>

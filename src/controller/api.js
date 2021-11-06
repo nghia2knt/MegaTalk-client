@@ -13,7 +13,7 @@ const endpoint = {
     findUser: "/api/auth/finduserbyusername",
     findMultiUser: "/api/auth/findmultiuserbyusername"
 }
-const host = "http://18.117.219.216:3102";
-const hostsocket = "http://18.117.219.216:3103";
+const host = "http://localhost:3102";
+const hostsocket = "http://localhost:3103";
 
 

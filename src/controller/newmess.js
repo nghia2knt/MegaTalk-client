@@ -1,3 +1,15 @@
+/*
+var socketz = io(hostsocket, { transports: ["websocket"] });
+function socketUp() {
+  socketz.on(`${localStorage.username}`, function (msg) {
+    var type = msg.type;
+    var data = JSON.parse(msg.data);
+    localStorage.roomRouter = data.roomID;
+   // console.log(localStorage.roomRouter);
+    
+});
+}
+*/
 function getStater() {
     {
         document.getElementById('newMess').value="Xin chào, hãy bắt đầu một tin nhắn.";
@@ -74,7 +86,8 @@ function sendNewMess() {
             console.log(e.responseJSON);
             alert(e.responseJSON);
         },
-        success: function(data) {
+        success: function(data) {     
+          
             window.location.href = "/chat";
         },
         dataType: "json",
@@ -86,3 +99,6 @@ function sendNewMess() {
   }
   
 
+$(function () {
+ // socketUp();
+});

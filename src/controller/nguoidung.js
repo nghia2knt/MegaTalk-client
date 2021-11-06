@@ -1,3 +1,4 @@
+var dataMain ="";
 const fixNumber = (number) => {
   return number >= 10 ? number : `0${number}`;
 };
@@ -23,8 +24,8 @@ function acceptAdd(username) {
       alert(e.responseJSON);
     },
     success: function (data) {
-      alert(data.status);
-      getALL();
+      alert("Đã chấp thuận lời mời kết bạn thành công!");
+      window.location.href="/nguoidung";
     },
     dataType: "json",
     contentType: "application/json",
@@ -48,8 +49,8 @@ function deleteFriend(username) {
       alert(e.responseJSON);
     },
     success: function (data) {
-      alert(data.status);
-      getALL();
+      alert("Đã xóa bạn thành công!");
+      window.location.href="/nguoidung";
     },
     dataType: "json",
     contentType: "application/json",
@@ -74,8 +75,8 @@ function addUser() {
       alert(e.responseJSON);
     },
     success: function (data) {
-      alert(data.status);
-      getALL();
+      alert("Đã gửi lời mời kết bạn thành công!");
+      window.location.href="/nguoidung";
     },
     dataType: "json",
     contentType: "application/json",
@@ -94,6 +95,7 @@ function getALL() {
         }
       },
       success: function (data) {
+        dataMain = data;
         // thông tin
         if (data.data.avatar==""){
           var avatar = document.getElementById("avatar");
@@ -121,7 +123,60 @@ function getALL() {
 
         // danh sách bạn
         const friendsList = data.data.friendsList;
-        var d = 0;
+        var friendMember = [];
+        for (var i in friendsList) {
+          const member = friendsList[i].username;
+          friendMember.push(member);
+        
+        }
+        const requestList = data.data.requestsFriendList;
+        for (var i in requestList) {
+          const member = requestList[i].username;
+          friendMember.push(member);
+        }
+
+       // console.log(friendMember);
+       
+        getMultiUser(friendMember).then(
+          (value)=>{
+            var memberListInfo=value;
+           
+            for (var i in friendsList) {
+              const obj = memberListInfo.data.filter(
+                (e) => e.username == friendsList[i].username
+              )[0];
+              if (obj.avatar == "")
+              obj.avatar = "./asset/image/defaultAvatar.jpg"; 
+              document.getElementById('tableFriendsBody').innerHTML +=
+              '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+              '<img src="'+obj.avatar+'" alt="Avatar" class="avatar2"></td><td  style="text-align: left;">' +
+              '</a></td>'+
+              '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
+              '<td style="text-align: center;vertical-align: middle;"><button type="button" class="btn btn-danger" onClick="if(confirm(\'Are you sure?\')) deleteFriend(\''+obj.username+'\')"  >Xóa bạn</button><td>'+
+              '</tr>';
+              
+            }
+            
+            for (var i in requestList) {
+              const obj = memberListInfo.data.filter(
+                (e) => e.username == requestList[i].username
+              )[0];
+              if (obj.avatar == "")
+              obj.avatar = "./asset/image/defaultAvatar.jpg"; 
+              document.getElementById('tableRequestBody').innerHTML +=
+              '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+              '<img src="'+obj.avatar+'" alt="Avatar" class="avatar2"></td><td  style="text-align: left;">' +
+              '</a></td>'+
+              '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
+              '<td style="text-align: center;vertical-align: middle;"><button type="button" class="btn btn-success" onClick="acceptAdd(\''+obj.username+'\')"  >Chấp thuận</button><button type="button" class="btn btn-light">Từ Chối</button><td>'+
+              '</tr>';
+              
+            }
+          }
+
+        )
+        /*
+         var d = 0;
         document.getElementById("tableFriendsBody").innerHTML = "";
         for (var i in friendsList) {
           d++;
@@ -136,6 +191,7 @@ function getALL() {
         }
 
         //danh sach loi moi
+        /*
         const requestList = data.data.requestsFriendList;
         var d = 0;
         document.getElementById("tableRequestBody").innerHTML = "";
@@ -148,10 +204,12 @@ function getALL() {
             requestList[i].username +
             '</a></td><td><button type="button" id="submit" name="submit"  onClick="acceptAdd(\'' +
             requestList[i].username +
-            '\')"  class="btn btn-success">Chấp thuận</button>&nbsp<button type="button" onClick="if(confirm(\'Are you sure?\')) deleteFriend(\'' +
+            '\')"  class="btn btn-success">Chấp thuận</button> &nbsp<button type="button" onClick="if(confirm(\'Are you sure?\')) deleteFriend(\'' +
             requestList[i].username +
             '\')"  class="btn btn-light">Từ chối</button></td></tr> ';
+         
         }
+        */
       },
       error: function (e) {
         window.location.href = "/dangnhap";
@@ -280,6 +338,102 @@ function getInfoUpdate() {
       });
   };
 };
+
+function getMultiUser(list){
+  return $.ajax({
+    type: "POST",
+    url: host + endpoint.findMultiUser,
+    data: JSON.stringify({
+      "listUser":list
+    }),
+    //async: false,
+    beforeSend: function (xhr) {
+      if (localStorage.token) {
+        xhr.setRequestHeader("jwt", localStorage.token);
+      }
+    },
+    error: function (e) {
+      alert(e.responseJSON);
+    },
+    success: function (data) {
+    },
+    dataType: "json",
+    contentType: "application/json",
+  });
+}
+
+function getProfileAnother(username){
+  $.ajax({
+    type: "POST",
+    url: host + endpoint.findUser,
+    data: JSON.stringify({
+      "usernameFind":username
+    }),
+    //async: false,
+    beforeSend: function (xhr) {
+      if (localStorage.token) {
+        xhr.setRequestHeader("jwt", localStorage.token);
+      }
+    },
+    error: function (e) {
+      alert(e.responseJSON);
+    },
+    success: function (data) {
+      if (data.data.avatar==""){
+        var avatar = document.getElementById("avatarInfo");
+        avatar.src = "./asset/image/defaultAvatar.jpg";
+      }else{ 
+        var avatar = document.getElementById("avatarInfo");
+        avatar.src = data.data.avatar;
+      }
+     
+
+      var username = document.getElementById("usernameInfo");
+      username.innerHTML = data.data.username;
+      var name = document.getElementById("nameInfo");
+      name.innerHTML = data.data.name;
+      var gennder = document.getElementById("gennderInfo");
+      if ((data.data.gennder = "0")) {
+        gennder.innerHTML = "Nam";
+      } else {
+        gennder.innerHTML = "Nữ";
+      }
+      var birthDay = document.getElementById("birthDayInfo");
+      birthDay.innerHTML = maskDate(data.data.birthDay);
+      var email = document.getElementById("emailInfo");
+      email.innerHTML = data.data.email;
+
+      var data2 = dataMain;
+    //  data2 = data2);
+     // console.log(data);
+      document.getElementById("btnThemBan").innerHTML =  '<button type="button" class="btn btn-primary" onclick=\"addUser(\''+data.data.username+'\')"  data-bs-dismiss="modal"> Thêm bạn </button>';
+    
+      for (var i in data2.data.friendsList){
+        if (data2.data.friendsList[i].username == data.data.username){
+          document.getElementById("btnThemBan").innerHTML = data.data.name + " là bạn bè của bạn.";
+        }
+      }
+      for (var i in data2.data.requestsFriendList){
+        if (data2.data.requestsFriendList[i].username == data.data.username){
+          document.getElementById("btnThemBan").innerHTML ='<button type="button" class="btn btn-success"  onclick=\"acceptAdd(\''+data.data.username+'\')"  data-bs-dismiss="modal"> Chấp thuận lời mời kết bạn </button>';
+        }
+      }
+      for (var i in data.data.requestsFriendList){
+        if (data.data.requestsFriendList[i].username == data2.data.username){
+          document.getElementById("btnThemBan").innerHTML ='<button type="button" class="btn btn-primary disabled"  data-bs-dismiss="modal"> Đã gửi lời mời kết bạn </button>';
+        }
+      }
+      if (data.data.username == data2.data.username){
+        document.getElementById("btnThemBan").innerHTML = "";
+
+      }
+    },
+    dataType: "json",
+    contentType: "application/json",
+  });
+  return true;
+}
+
 $(function () {
   getALL();
 });

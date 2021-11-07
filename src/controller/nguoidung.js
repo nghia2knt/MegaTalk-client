@@ -95,6 +95,7 @@ function getALL() {
         }
       },
       success: function (data) {
+        console.log(data);
         dataMain = data;
         // thông tin
         if (data.data.avatar==""){
@@ -111,7 +112,7 @@ function getALL() {
         var name = document.getElementById("name");
         name.innerHTML = data.data.name;
         var gennder = document.getElementById("gennder");
-        if ((data.data.gennder = "0")) {
+        if ((data.data.gennder == 0)) {
           gennder.innerHTML = "Nam";
         } else {
           gennder.innerHTML = "Nữ";
@@ -271,7 +272,7 @@ function getUpdateMain(linkAvatarT) {
       success: function (data) {
         var nameT = $('input[name="nameUpdate"]').val();
         var birthDayT = $('input[name="birthDayUpdate"]').val();
-        var gennderT = parseInt(data.data.gennder.toString());
+        var gennderT = parseInt($('select[name="gennderUpdate"]').val().toString());
        
         if (linkAvatarT == ""){
           var avatarT = data.data.avatar;
@@ -326,8 +327,10 @@ function getInfoUpdate() {
           }
         },
         success: function(data) {
+          console.log(data);
           document.getElementById('nameUpdate').value=data.data.name;
           document.getElementById('birthDayUpdate').value=data.data.birthDay;
+          document.getElementById('gennderUpdate').value=data.data.gennder;
           
         },
         error: function(e) {
@@ -393,7 +396,7 @@ function getProfileAnother(username){
       var name = document.getElementById("nameInfo");
       name.innerHTML = data.data.name;
       var gennder = document.getElementById("gennderInfo");
-      if ((data.data.gennder = "0")) {
+      if ((data.data.gennder == "0")) {
         gennder.innerHTML = "Nam";
       } else {
         gennder.innerHTML = "Nữ";

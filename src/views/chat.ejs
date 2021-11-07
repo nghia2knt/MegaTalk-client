@@ -280,7 +280,67 @@
         </div>
       </div>
     </div>
-
+    <div
+    class="modal fade"
+    id="listAddRoomModal"
+    tabindex="-1"
+    aria-labelledby="listAddRoomModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="listAddRoomModalLabel">Thêm người dùng vào phòng</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 " id = "istAddRoomHeader">
+            
+              
+            </div>
+          </div>
+         
+          <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <h6 class="mb-2">Chọn bạn:</h6>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"></div>
+            <div class="panel-body table-responsive2">
+              <table class="table" id="tableListAddMD">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody id="tableListAddBodyMD"></tbody>
+              </table>
+            </div>
+          </div>
+          
+        </div>
+       
+        <div class="modal-footer">
+   
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Đóng
+          </button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
     <div
     class="modal fade"
     id="infoAnotherModal"
@@ -523,13 +583,25 @@
                     href="#"
                     title=""
                     data-bs-toggle="modal"
-                    data-bs-target="#infoChatModal"
-                    onclick="return getStaterForInfoChat()" 
+                    data-bs-target="#listAddRoomModal"
+                    onclick="" 
                     class="iconHV" 
                     style="margin-left: auto;"
                     >
+                    <i class="bi bi-person-plus-fill fs-4"></i>
+                  </a>
+                  <a
+                    href="#"
+                    title=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoChatModal"
+                    onclick="return getStaterForInfoChat()" 
+                    class="iconHV" 
+                    style="padding-left: 20px;"
+                    >
                     <i class="bi bi-info-circle fs-4"></i>
                   </a>
+                  
                 </div>
               </form>
               <hr />

@@ -1,6 +1,4 @@
-if (localStorage.username) {
-    document.getElementById("username").value = localStorage.username;
-}
+
 function kichHoat() {
     var username = $('input[name="username"]').val()
     var code = $('input[name="code"]').val()
@@ -22,3 +20,10 @@ function kichHoat() {
    });
     return false;
 }
+
+$(function () {
+    if (localStorage.username) {
+        document.getElementById("username").value = localStorage.username;
+    }
+  });
+  

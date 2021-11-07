@@ -135,6 +135,7 @@
           },
           success: function(data) {
               localStorage.username = username;
+              localStorage.password = password;
               window.location.href = "/kichhoat";
             
           },

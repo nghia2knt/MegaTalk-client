@@ -56,6 +56,7 @@
 
         },
         success: function(data) {
+            localStorage.clear();
             localStorage.token = "JWT "+ data.data.accessToken;
             console.log("JWT "+ data.data.accessToken);
             window.location.href = "/";
@@ -66,4 +67,12 @@
         return false;
     }
 
- 
+    $(function () {
+      if (localStorage.username) {
+          document.getElementById("txtus").value = localStorage.username;
+      }
+      if (localStorage.password) {
+        document.getElementById("txtpw").value = localStorage.password;
+    }
+
+    });

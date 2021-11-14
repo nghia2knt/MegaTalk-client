@@ -58,8 +58,7 @@ function deleteFriend(username) {
   return false;
 }
 
-function addUser() {
-  var username = $('input[name="addUsername"]').val();
+function addUser(username) {
   $.ajax({
     type: "POST",
     url: host + endpoint.addFriend,
@@ -95,7 +94,7 @@ function getALL() {
         }
       },
       success: function (data) {
-        console.log(data);
+       // console.log(data);
         dataMain = data;
         // thông tin
         if (data.data.avatar==""){
@@ -169,7 +168,7 @@ function getALL() {
               '<img src="'+obj.avatar+'" alt="Avatar" class="avatar2"></td><td  style="text-align: left;">' +
               '</a></td>'+
               '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
-              '<td style="text-align: center;vertical-align: middle;"><button type="button" class="btn btn-success" onClick="acceptAdd(\''+obj.username+'\')"  >Chấp thuận</button><button type="button" class="btn btn-light">Từ Chối</button><td>'+
+              '<td style="text-align: center;vertical-align: middle;"><button type="button" class="btn btn-success" onClick="acceptAdd(\''+obj.username+'\')"  >Chấp thuận</button><button type="button" class="btn btn-light" onClick="nonAcceptFriend(\''+obj.username+'\')">Từ Chối</button><td>'+
               '</tr>';
               
             }
@@ -437,6 +436,143 @@ function getProfileAnother(username){
   return true;
 }
 
+
+function findUserByName() {
+  var name = $('input[name="findUserByNameInput"]').val();
+  $.ajax({
+    type: "POST",
+    url: host + endpoint.findUserByName,
+    data: JSON.stringify({
+      nameFind: name,
+    }),
+    beforeSend: function (xhr) {
+      if (localStorage.token) {
+        xhr.setRequestHeader("jwt", localStorage.token);
+      }
+    },
+    error: function (e) {
+      alert(e.responseJSON);
+    },
+    success: function (data) {
+      console.log(data);
+      document.getElementById('tableSearchUserBody').innerHTML ="";
+      var searchList = data.data;
+        for (var i in searchList) {
+            if (searchList[i].avatar == "")
+            searchList[i].avatar = "./asset/image/defaultAvatar.jpg"; 
+            var str1=
+            '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+searchList[i].username+'\')" class="iconHV">'+
+            '<img src="'+searchList[i].avatar+'" alt="Avatar" class="avatar2"></td><td  style="text-align: left;">' +
+            '</a></td>'+
+            '<td style="text-align: center;vertical-align: middle;">'+searchList[i].name+'<br>('+searchList[i].username+')<td>'+
+            '<td style="text-align: center;vertical-align: middle;">';
+
+             var data2 = dataMain;
+             var str  =  '<button type="button" class="btn btn-primary" onClick="addUser(\''+searchList[i].username+'\')"  >Thêm bạn</button>';
+             if (searchList[i].username == data2.data.username){
+              str = "";
+            }
+            console.log(data2.data.friendsList );
+            for (var j in searchList[i].requestsFriendList){
+              if (searchList[i].requestsFriendList[j].username == data2.data.username){
+                str ='<button type="button" class="btn btn-primary disabled"  data-bs-dismiss="modal"> Đã gửi lời mời kết bạn </button>';
+              }
+            } 
+            for (var j in data2.data.friendsList){
+                if (data2.data.friendsList[j].username == searchList[i].username){
+                  str =  searchList[i].name + " là bạn bè của bạn.";
+                }
+              }
+    
+              for (var j in data2.data.requestsFriendList){
+                if (data2.data.requestsFriendList[j].username ==searchList[i].username){
+                  str ='<button type="button" class="btn btn-success"  onclick=\"acceptAdd(\''+searchList[i].username+'\')"  data-bs-dismiss="modal"> Chấp thuận lời mời kết bạn </button>';
+                }
+              }
+      
+            
+
+              document.getElementById('tableSearchUserBody').innerHTML += str1+str+'<td>'+
+              '</tr>';
+            
+          }
+          
+        
+
+      
+
+    },
+    dataType: "json",
+    contentType: "application/json",
+  });
+  return false;
+}
+
+
 $(function () {
   getALL();
 });
+
+
+function postUpdatePass(){
+  var dat2 = dataMain;
+  var oldpass =  $('input[name="oldPassword"]').val();
+  var newpass = $('input[name="newPassword"]').val();
+  var newpass2 = $('input[name="newPassword2"]').val();
+  if ((newpass==newpass2) &&(newpass!="")&&(oldpass!="")){
+    $.ajax({
+      type: "POST",
+      url: host + endpoint.updatePass,
+      data: JSON.stringify({
+          "username":dat2.data.username,
+          "oldpassword":oldpass,
+          "newpassword":newpass
+      }),
+      //async: false,
+      beforeSend: function (xhr) {
+        if (localStorage.token) {
+          xhr.setRequestHeader("jwt", localStorage.token);
+        }
+      },
+      error: function (e) {
+        alert(e.responseJSON);
+      },
+      success: function (data) {
+        alert("Đổi mật khẩu thành công.");
+        window.location.href = "/nguoidung";
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+  }else{
+    alert("Kiểm tra nhập xuất.");
+  }
+ 
+}
+
+
+
+function nonAcceptFriend(username){
+    $.ajax({
+      type: "POST",
+      url: host + endpoint.nonAccecpt,
+      data: JSON.stringify({
+          "usernameDelete":username,
+      }),
+      //async: false,
+      beforeSend: function (xhr) {
+        if (localStorage.token) {
+          xhr.setRequestHeader("jwt", localStorage.token);
+        }
+      },
+      error: function (e) {
+        alert(e.responseJSON);
+      },
+      success: function (data) {
+        window.location.href = "/nguoidung";
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+ 
+}

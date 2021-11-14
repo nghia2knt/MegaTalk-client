@@ -59,6 +59,7 @@
             localStorage.clear();
             localStorage.token = "JWT "+ data.data.accessToken;
             console.log("JWT "+ data.data.accessToken);
+            localStorage.username = data.data.username;
             window.location.href = "/";
         },
         dataType: "json",

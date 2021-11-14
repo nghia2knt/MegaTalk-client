@@ -6,6 +6,10 @@ var dataChat="";
 var maxLoad = 20;
 var listRoom = [];
 var infoMemberMain = [];
+var index =0;
+var arrSeen =[];
+var lastMessInfo="";
+var keo=true;
 const fixNumber = (number) => {
   return number >= 10 ? number : `0${number}`;
 };
@@ -51,6 +55,9 @@ function getALL() {
               }
             }
           
+        }
+        for (i in data.data.friendsList){
+          roomMember.push(data.data.friendsList[i].username) 
         }
         
         roomMember.push(localStorage.username);
@@ -166,10 +173,11 @@ function getALL() {
         // search info member
         const memberList = chatsListMain.member;
         var arrUser = [];
+        
         for (var i in memberList){
            arrUser.push(memberList[i].username) 
         }
-      
+
             var messagesList = chatsListMain.messagesList;
             if (maxLoad >= messagesList.length){
               document.getElementById("tableChatbox").innerHTML = "";
@@ -178,16 +186,24 @@ function getALL() {
               document.getElementById("tableChatbox").innerHTML = "";
               document.getElementById("tableChatbox").innerHTML += 
               '<tr><td></td><td style="text-align: center;"><a href="#" onclick="return loadMore()">Xem thêm</a></td><td></td></tr>'
+              d++;
             }
+            console.log(messagesList);
+        
             for (var i in messagesList) {
               const obj = memberListInfo.data.filter(
                 (e) => e.username == messagesList[i].sender
               )[0];
+
+              
+
               if (obj.avatar == "")
                   obj.avatar = "./asset/image/defaultAvatar.jpg"; 
               d++;
-           
+              index = messagesList[i].index;
+               // console.log(messagesList[i]);
               //console.log(dataChat.username);
+              if (!messagesList[i].recall){
               if (obj.username!=localStorage.username){
                 if (messagesList[i].type==0){
                   document.getElementById("tableChatbox").innerHTML +=
@@ -231,6 +247,7 @@ function getALL() {
                   '<label class="text-start triangle-obtuse right " style="white-space: normal;">'+
                   '<video width="320" controls><source src="'+messagesList[i].content+'" type="video/mp4"></video><br>' +
                   '<label class="fw-lighter fs-6"><small>' + maskDate(messagesList[i].createAt) + "</small></label>" +
+                  
                   "</label>" +
                  
                   '</td><td style="border:none"></td></tr>';
@@ -238,12 +255,14 @@ function getALL() {
               }else{
                 if (messagesList[i].type==0){
                   document.getElementById("tableChatbox").innerHTML +=
-                  '<tr class="messenger"><td style="border:none"></td><td  style="border:none;text-align: right;">' +
+                  '<tr class="messenger" ><td style="border:none"></td><td  style="border:none;text-align: right;">' +
                  
                   '<label class="text-start triangle-obtuse left " style="white-space: normal;">' +
-                  '<label class="fs-5">'+  messagesList[i].content + '</label><br>'+  
+                  '<label class="fs-5" id="R_'+d+'">'+  messagesList[i].content + '</label><br>'+  
                   '<label class="fw-lighter fs-6"><small>' + maskDate(messagesList[i].createAt) + "</small></label>" +
+                  //'<br><label class="fw-lighter fs-6" >'+ '<small><a class="delete" href="#" onclick="getRecall('+messagesList[i].index+','+d+')">[Thu Hồi]</a></small>' + '</label>'+  
                   "</label>" +
+            
                   '</td><td style="height:100px;width:100px;text-align: center;vertical-align: middle;border:none">'+
                   '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td></tr>';
                 }else
@@ -274,18 +293,72 @@ function getALL() {
               }
               
               
-            }
-           
+              
+            }else{
+              
+              if (obj.username!=localStorage.username){
+               
+                  document.getElementById("tableChatbox").innerHTML +=
+                  '<tr class="messenger"><td style="height:100px;width:100px;text-align: center;vertical-align: middle;border:none">'+
+                  '<a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+                  '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="border:none;text-align: left;">' +
+                  '<p class="text-start fw-bold">' +
+                  obj.name+
+                  "</p>" +
+                  '</a>'+
+                  '<label class="text-start triangle-obtuse right " style="white-space: normal;">' +
+                  '<label class="fs-5">'+  'Tin nhắn đã bị thu hồi'+ '</label><br>'+  
+                  '<label class="fw-lighter fs-6"><small>' + maskDate(messagesList[i].createAt) + "</small></label>" +
+                  "</label>" +
+                  '</td><td style="border:none"></td></tr>';
+                
+              }else{
+                
+                  document.getElementById("tableChatbox").innerHTML +=
+                  '<tr class="messenger"><td style="border:none"></td><td  style="border:none;text-align: right;">' +
+                 
+                  '<label class="text-start triangle-obtuse left " style="white-space: normal;">' +
+                  '<label class="fs-5">'+  'Tin nhắn đã bị thu hồi' + '</label><br>'+  
+                  '<label class="fw-lighter fs-6"><small>' + maskDate(messagesList[i].createAt) + "</small></label>" +
+                  "</label>" +
+            
+                  '</td><td style="height:100px;width:100px;text-align: center;vertical-align: middle;border:none">'+
+                  '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td></tr>';
+              
+              }
 
+            }
+          }
+           
+            lastMessInfo = messagesList[messagesList.length-1];
+            if (lastMessInfo.sender == localStorage.username){
+              
+              var strSeen="";
+              for (var i in messagesList[messagesList.length-1].seeder){
+                if (i==0){
+                  strSeen=strSeen+messagesList[messagesList.length-1].seeder[i];
+                }else{
+                  strSeen=strSeen+", "+messagesList[messagesList.length-1].seeder[i];
+                }
+              }
+              if ((messagesList[messagesList.length-1].seeder.length)==0){
+
+              }else{
+                document.getElementById("tableChatbox").innerHTML +='<tr><td style="border:none;text-align: right;"></td><td  style="border:none;text-align: right;"><label class="fw-lighter fs-6" id="lastSeen"><small>'+'</small></label></td></tr>'
+                document.getElementById("lastSeen").innerHTML =strSeen+" đã xem";
+              }
+              
+            }
           }
         ).then(()=>{
          // getALL();
-          if (maxLoad == 20) {
+          if (maxLoad == 20 && keo) {
             $("#myMessageContainer")
           .stop()
           .animate({
           scrollTop: $("#myMessageContainer")[0].scrollHeight+1000,
-        });}
+        });
+        keo=false}
         })
        
        
@@ -306,8 +379,41 @@ function socketUp() {
       if (dat2.messagesList[0].sender == localStorage.username){
        changeID(dat2.roomID,dat2.roomName);
       }
+      getALL();
     }
-  getALL();
+    if (msg.type == "seeder"){    
+      /*
+      var strSeen="";
+      for (var i in lastMessInfo.seeder){
+        strSeen=strSeen+lastMessInfo.seeder[i]+",";
+      }
+      document.getElementById("lastSeen").innerHTML =strSeen + " đã xem";
+      */
+     getALL();
+    }
+    if (msg.type == "recall"){    
+      /*
+      var strSeen="";
+      for (var i in lastMessInfo.seeder){
+        strSeen=strSeen+lastMessInfo.seeder[i]+",";
+      }
+      document.getElementById("lastSeen").innerHTML =strSeen + " đã xem";
+      */
+     getALL();
+    }
+    if (msg.type == "newMess"){
+      keo=true;
+      getALL();
+    }
+    if (msg.type == "newName"){ 
+      console.log(msg.data);
+      var sdata = JSON.parse(msg.data)
+      if (roomChatID == sdata.roomID) changeID(roomChatID,sdata.name) 
+      getALL();
+    }
+    if (msg.type == "newMember"){ 
+      getALL();
+    }
 });
 }
 
@@ -319,6 +425,7 @@ function loadMore(){
 function changeID(id,roomname) {
   roomChatID = id;
   roomNameMain = roomname;
+  keo=true;
   var data = dataChat;
   data = JSON.parse(data);
   maxLoad = 20;
@@ -652,7 +759,7 @@ function getStaterForInfoChat() {
         document.getElementById('infoChatNameHeader').innerHTML=
         '<form  class="input-group">'+
         '<input type="text" class="form-control" id="infoChatName" name="infoChatName" />'+
-        '<button type="button" class="btn btn-primary" onclick="" data-bs-dismiss="modal">Lưu</button>'+
+        '<button type="button" class="btn btn-primary" onclick="postChangeName()" data-bs-dismiss="modal">Lưu</button>'+
         '</form>';
         document.getElementById('infoChatName').value=roomNameMain;
       }
@@ -803,3 +910,169 @@ function acceptAdd(username) {
   });
   return false;
 }
+
+function daXem(){
+ // console.log(lastMessInfo.sender);
+  var kt = true;
+  for (var i in lastMessInfo.seeder){
+    if (lastMessInfo.seeder[i]==localStorage.username)
+      kt=false;
+  }
+  
+  if (lastMessInfo.sender!=localStorage.username && kt){
+    
+    $.ajax({
+    type: "POST",
+    url: host + endpoint.seeder,
+    data: JSON.stringify({
+      "roomID":roomChatID,
+      "index":index
+  }),
+    beforeSend: function (xhr) {
+      if (localStorage.token) {
+        xhr.setRequestHeader("jwt", localStorage.token);
+      }
+    },
+    error: function (e) {
+      alert(e.responseJSON);
+    },
+    success: function (data) {
+      getALL();
+    },
+    dataType: "json",
+    contentType: "application/json",
+  });
+}
+  return false;
+
+}
+
+
+
+
+
+function getRecall(inn,x){
+ $.ajax({
+     type: "POST",
+     url: host + endpoint.recall,
+     data: JSON.stringify({
+       "roomID":roomChatID,
+       "index":inn
+   }),
+     beforeSend: function (xhr) {
+       if (localStorage.token) {
+         xhr.setRequestHeader("jwt", localStorage.token);
+       }
+     },
+
+     error: function (e) {
+       alert(e.responseJSON);
+     },
+     success: function (data) {
+      document.getElementById("R_"+x).innerHTML ="Tin nhắn đã bị thu hồi.";
+  
+     },
+     dataType: "json",
+     contentType: "application/json",
+   });
+   
+ 
+ }
+
+
+
+ function postChangeName(){
+   var name =  $('input[name="infoChatName"]').val();
+  $.ajax({
+      type: "POST",
+      url: host + endpoint.changeName,
+      data: JSON.stringify({
+        "roomID":roomChatID,
+        "name": name
+    }),
+      beforeSend: function (xhr) {
+        if (localStorage.token) {
+          xhr.setRequestHeader("jwt", localStorage.token);
+        }
+      },
+ 
+      error: function (e) {
+        alert(e.responseJSON);
+      },
+      success: function (data) {
+        roomNameMain=name;
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+    
+  
+  }
+
+  
+function getStaterForAddMember() {
+  {
+      var data = JSON.parse(dataChat);
+      var chatsListData = data.data.chatsList.filter(
+        (e) => e.roomID == roomChatID
+      )[0];
+     
+      if (chatsListData.type == 0) {
+        document.getElementById('tableListAddBodyMD').innerHTML="<td>Không thể thêm người dùng vào phòng chat 1-1</td>";
+      }else{
+        document.getElementById('tableListAddBodyMD').innerHTML="";
+        var memberT = chatsListData.member;
+        var friendListT = data.data.friendsList;
+        friendListT=  friendListT.filter(ar => !memberT.find(rm => (rm.username === ar.username) ))
+        for (var i in friendListT){
+          const obj = infoMemberMain.data.filter(
+            (e) => e.username ==  friendListT[i].username
+          )[0];
+          if (obj.avatar == "")
+          obj.avatar = "./asset/image/defaultAvatar.jpg"; 
+          //console.log(obj)
+          document.getElementById('tableListAddBodyMD').innerHTML +=
+          '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+          '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
+          '</a></td>'+
+          '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
+          '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-primary" onclick=\"postAddMember(\''+obj.username+'\')" >Thêm vào phòng</button><td>'+
+          '</tr>';
+          
+          
+        }
+      }
+      
+     
+     
+  
+  };
+};
+
+function postAddMember(username){
+ 
+ $.ajax({
+     type: "POST",
+     url: host + endpoint.addMember,
+     data: JSON.stringify({
+       "roomID":roomChatID,
+       "username": username
+   }),
+     beforeSend: function (xhr) {
+       if (localStorage.token) {
+         xhr.setRequestHeader("jwt", localStorage.token);
+       }
+     },
+
+     error: function (e) {
+       alert(e.responseJSON);
+     },
+     success: function (data) {
+       
+     },
+     dataType: "json",
+     contentType: "application/json",
+   });
+   
+ 
+ }

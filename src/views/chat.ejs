@@ -113,6 +113,13 @@
 .imgUpload:hover{
   color:#24C0A1;
 }
+.delete{
+    color: red;
+    display: none;
+}
+.messenger:hover .delete {
+   display:block  
+}
     </style>
   </head>
   <body>
@@ -300,7 +307,7 @@
         </div>
         <div class="modal-body" id="modalBody">
           <div class="row gutters">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 " id = "istAddRoomHeader">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 " id = "listAddRoomHeader">
             
               
             </div>
@@ -584,9 +591,10 @@
                     title=""
                     data-bs-toggle="modal"
                     data-bs-target="#listAddRoomModal"
-                    onclick="" 
+                    onclick="return getStaterForAddMember()" 
                     class="iconHV" 
                     style="margin-left: auto;"
+                    id = "iconAddHV"
                     >
                     <i class="bi bi-person-plus-fill fs-4"></i>
                   </a>
@@ -609,7 +617,7 @@
                 class="panel-body table-responsive h-100"
                 id="myMessageContainer"
               >
-                <table class="table" id="tableChat">
+                <table class="table" id="tableChat"  onclick="daXem()">
                   <tbody id="tableChatbox">
                     <tr>
                       <td></td>
@@ -639,6 +647,7 @@
                           value=""
                           placeholder="Nhập văn bản và nhấn phím Enter để gửi..."
                           class="form-control"
+                          onclick="daXem()"
                         />
                         &nbsp
                         <span class="input-group-btn">

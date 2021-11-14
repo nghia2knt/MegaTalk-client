@@ -349,8 +349,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            onclick=""
-            data-bs-dismiss="modal"
+            onclick="postUpdatePass()"
           >
             Lưu
           </button>
@@ -608,31 +607,61 @@
                         <div
                           class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
                         >
-                          <h6 class="mb-2 text-primary">Thêm bạn bè</h6>
+                          <h6 class="mb-2 text-primary">Tìm kiếm bạn bè mới</h6>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                           <div class="input-group">
+                            <form onsubmit="return findUserByName()" >
                             <input
                               class="form-control"
                               type="text"
-                              id="addUsername"
-                              name="addUsername"
-                              placeholder="Nhập tên tài khoản"
+                              id="findUserByNameInput"
+                              name="findUserByNameInput"
+                              placeholder="Nhập tên..."
                             />
+                            <input type="submit" hidden>
+                            </form>
                             &nbsp
                             <span class="input-group-btn">
                               <button
                                 class="btn btn-primary"
-                                id="btnAddUser"
-                                onclick="return addUser()"
+                                id="btnFindUser"
+                                onclick="return findUserByName()"
                               >
-                                Thêm Bạn
+                                Tìm
                               </button>
                             </span>
                           </div>
+                         
                         </div>
                       </div>
                     </div>
+
+                    <div class="row gutters">
+                      <div
+                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                      >
+                        
+                      </div>
+                      <div
+                        class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      ></div>
+                      <div class="panel-body table-responsive">
+                        <table class="table" id="tableSearchUser">
+                          <thead>
+                            <tr>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
+                            </tr>
+                          </thead>
+                          <tbody id="tableSearchUserBody"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                   
+
+
                   </div>
                 </div>
               </div>

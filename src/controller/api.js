@@ -11,7 +11,14 @@ const endpoint = {
     uploadfile: "/api/chat/uploadfile",
     updateProfile: "/api/auth/updateprofile",
     findUser: "/api/auth/finduserbyusername",
-    findMultiUser: "/api/auth/findmultiuserbyusername"
+    findMultiUser: "/api/auth/findmultiuserbyusername",
+    findUserByName: "/api/auth/finduserbyname",
+    seeder: "/api/chat/seender",
+    recall: "/api/chat/recall",
+    updatePass: "/api/auth/updatepass",
+    nonAccecpt: "/api/auth/nonaccept",
+    changeName: "/api/chat/changeroomname",
+    addMember: "/api/chat/addmember"
 }
 const host = "http://localhost:3102";
 const hostsocket = "http://localhost:3103";

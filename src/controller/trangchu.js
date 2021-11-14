@@ -11,6 +11,7 @@ function getALL(){
             }
           },
           success: function(data) {
+            console.log(localStorage.token);
             document.getElementById("welcome").innerHTML="Chào mừng, "+data.data.name+" đã đến với MegaTalk!";
             localStorage.username = data.data.username;
           },

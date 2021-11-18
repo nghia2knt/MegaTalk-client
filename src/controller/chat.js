@@ -97,7 +97,23 @@ function getALL() {
               }
             }
           }
-          
+          var avat =[];
+          if (chatsList[i].type==1){
+            const memberList = data.data.chatsList[i].member;
+            for (j in memberList){
+              
+                const obj = memberListInfo.data.filter(
+                  (e) => e.username == memberList[j].username
+                )[0];
+               
+                if (obj.avatar!=""){
+                  avat.push(obj.avatar);
+                }else{
+                  avat.push('./asset/image/defaultAvatar.jpg');
+                }
+              
+            }
+          }
           // set ten phong cho phong dau tien 
 
          
@@ -115,8 +131,43 @@ function getALL() {
            
           //}
          
-
-          document.getElementById("tableRoom").innerHTML +=
+          if (chatsList[i].type==1){
+            
+            document.getElementById("tableRoom").innerHTML +=
+            
+            "<tr onclick=\"changeID('" +
+            chatID +"','"+roomname+
+            '\')" class="list-group-item list-group-item-action" id=R_'+chatID+'>'+
+            '<td style="height:50px;width:50px;text-align: center;vertical-align: middle;border:none;">'+
+            '<div class="avatars">'+
+            '<span class="avatarG" >'+
+                  '<img  src='+avat[0]+' width="50" height="50">'+
+              '</span>'+
+            '<span class="avatarG">'+
+                  '<img src='+avat[1]+' width="50" height="50">'+
+              '</span>'+
+            '<span class="avatarG">'+
+                  '<img src='+avat[2]+' width="50" height="50">'+
+              '</span>'+
+       
+          '</div>'+
+            '</td><td class="" style="border:none;" >' +
+            '<p class="text-start fw-bold" id = "N_'+chatID+'">' +
+            roomname+
+            "</p>" +
+            '<p class="text-start lastMess-2" id = "C_'+chatID+'">' +
+            lastMess +
+            "</p>" +
+            '<p class="text-start fw-lighter fs-6" id = "T_'+chatID+'">' +
+            maskDate(lastTime) +
+            "</p>" +
+            '<input type="hidden" id="custId" name="time" value="'+lastTime+'">'+
+            '<input type="hidden" id="custId2" name="iddd" value="'+chatID+'">'+
+            "</td></tr>";
+           
+            if (chatID == roomChatID) selectRoom();
+          }else{
+            document.getElementById("tableRoom").innerHTML +=
             
             "<tr onclick=\"changeID('" +
             chatID +"','"+roomname+
@@ -137,6 +188,8 @@ function getALL() {
             "</td></tr>";
            
             if (chatID == roomChatID) selectRoom();
+          }
+         
           
         }
       

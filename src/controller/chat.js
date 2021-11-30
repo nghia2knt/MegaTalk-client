@@ -482,7 +482,7 @@ function socketUp() {
       $('#listAddRoomModal').modal('hide');
     }
     if (msg.type == "deleteMember"){ 
-     
+      firstTime=true;
       getALL();
       $('#infoChatModal').modal('hide');
     }
@@ -655,12 +655,6 @@ function sendVideo(url) {
 $(document).ready(function(){
   $("#imageUpload").on('change',function(){
     getUploadFile();
-  });
-});
-$(document).ready(function(){
-  $("#btnroiphong").on('click',function(){
-    postDeleteMember(localStorage.username,roomChatID);
-    window.location.href = "/chat";
   });
 });
 
@@ -881,8 +875,8 @@ function getStaterForInfoChat() {
           '</tr>';
           document.getElementById('footinfo').innerHTML ="";
           document.getElementById('footinfo').innerHTML +=
-          '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnroiphong">Rời khỏi phòng</button>'+
-          '<button type="button" class="btn btn-danger" data-bs-dismiss="modal" style = "margin-right: auto;" onclick="deleteRoom()">Xóa phòng</button>'+
+          '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnroiphong" onclick="deleteSelf()">Rời khỏi phòng</button>'+
+          '<button type="button" class="btn btn-danger" data-bs-dismiss="modal" style = "margin-right: auto;" onclick="postDeleteRoom()">Xóa phòng</button>'+
           '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng </button>';
           
           
@@ -1241,4 +1235,10 @@ function postDeleteRoom(){
   
   }
 
+  function deleteSelf(){
+    postDeleteMember(localStorage.username);
+   
+  }
+
   
+ 

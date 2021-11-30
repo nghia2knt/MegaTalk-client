@@ -17,7 +17,7 @@ const endpoint = {
     recall: "/api/chat/recall",
     updatePass: "/api/auth/updatepass",
     nonAccecpt: "/api/auth/nonaccept",
-    changeName: "/api/chat/changeroomname",
+    changeName: "/api/chat/changeroomname", 
     addMember: "/api/chat/addmember",
     deleteMember: "/api/chat/deletemember",
     deleteRoom: "/api/chat/deleteroom"

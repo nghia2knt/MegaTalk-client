@@ -22,7 +22,7 @@ const endpoint = {
     deleteMember: "/api/chat/deletemember",
     deleteRoom: "/api/chat/deleteroom"
 }
-const host = "http://localhost:3102";
-const hostsocket = "http://localhost:3103";
+const host = "http://ec2-3-141-196-61.us-east-2.compute.amazonaws.com:3102";
+const hostsocket = "http://ec2-3-141-196-61.us-east-2.compute.amazonaws.com:3103";
 
 

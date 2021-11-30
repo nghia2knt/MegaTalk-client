@@ -18,7 +18,9 @@ const endpoint = {
     updatePass: "/api/auth/updatepass",
     nonAccecpt: "/api/auth/nonaccept",
     changeName: "/api/chat/changeroomname",
-    addMember: "/api/chat/addmember"
+    addMember: "/api/chat/addmember",
+    deleteMember: "/api/chat/deletemember",
+    deleteRoom: "/api/chat/deleteroom"
 }
 const host = "http://localhost:3102";
 const hostsocket = "http://localhost:3103";

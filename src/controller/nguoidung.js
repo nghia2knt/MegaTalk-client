@@ -1,4 +1,5 @@
 var dataMain ="";
+var namesendto ="";
 const fixNumber = (number) => {
   return number >= 10 ? number : `0${number}`;
 };
@@ -152,9 +153,9 @@ function getALL() {
               '<img src="'+obj.avatar+'" alt="Avatar" class="avatar2"></td><td  style="text-align: left;">' +
               '</a></td>'+
               '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
-              '<td style="text-align: center;vertical-align: middle;"><button type="button" class="btn btn-danger" onClick="if(confirm(\'Are you sure?\')) deleteFriend(\''+obj.username+'\')"  >Xóa bạn</button><td>'+
+              '<td style="text-align: center;vertical-align: middle;"><button type="button" class="btn btn-danger" onClick="if(confirm(\'Are you sure?\')) deleteFriend(\''+obj.username+'\')"  >Xóa bạn</button> &nbsp<button  data-bs-toggle="modal" data-bs-target="#sendMessToModal" type="button" class="btn btn-primary" onClick="getInfoSendMessTo(\''+obj.username+'\')"  >Gửi tin nhắn</button><td>'+
               '</tr>';
-              
+             
             }
             
             for (var i in requestList) {
@@ -312,8 +313,44 @@ function getUpdateMain(linkAvatarT) {
   }
 }
 
+function getInfoSendMessTo(name) {
+  namesendto = name;
+  document.getElementById('contextMess').value="";
+  document.getElementById('sendMessToModalLabel').innerHTML="Đến: "+name;
+};
 
+function postnewmess(){
+  var content = $('input[name="contextMessT"]').val()
+  var listname = [];
+  listname.push(namesendto);
+  if (content!="" && listname.length>0){
+    $.ajax({
+      type: 'POST',
+      url: host + endpoint.sendNewMess,
+      data: JSON.stringify({
+          "type":0,
+          "content":content,
+          "receiver":listname
+      })
+      ,beforeSend: function(xhr) {
+      if (localStorage.token) {
+        xhr.setRequestHeader('jwt', localStorage.token);
+      }
+      },
+      error: function(e) {
+          console.log(e.responseJSON);
+          alert(e.responseJSON);
+      },
+      success: function(data) {     
+        
+          window.location.href = "/chat";
+      },
+      dataType: "json",
+      contentType: "application/json"
+   });
+  }
 
+}
 
 function getInfoUpdate() {
   {
@@ -439,6 +476,9 @@ function getProfileAnother(username){
 
 function findUserByName() {
   var name = $('input[name="findUserByNameInput"]').val();
+  if (name !=""){
+
+ 
   $.ajax({
     type: "POST",
     url: host + endpoint.findUserByName,
@@ -497,7 +537,7 @@ function findUserByName() {
             
           }
           
-        
+       
 
       
 
@@ -505,6 +545,7 @@ function findUserByName() {
     dataType: "json",
     contentType: "application/json",
   });
+}
   return false;
 }
 

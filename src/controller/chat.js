@@ -1,4 +1,4 @@
-var roomChatID = 0;
+var roomChatID = "";
 var socket = io(hostsocket, { transports: ["websocket"] });
 var firstTime = true;
 var roomNameMain = "";
@@ -49,6 +49,14 @@ function getALL() {
         for (var i in chatsList) {
            
             const memberList = data.data.chatsList[i].member;
+            if (chatsList[i].type==1) {
+              const messagesList = data.data.chatsList[i].messagesList;
+              for (j in messagesList){
+                if (messagesList[j].sender!=localStorage.username){
+                  roomMember.push(messagesList[j].sender) 
+                }
+              }
+            }
             for (j in memberList){
               if (memberList[j].username!=localStorage.username){
                 roomMember.push(memberList[j].username) 
@@ -62,7 +70,7 @@ function getALL() {
         
         roomMember.push(localStorage.username);
         roomMember = [...new Set(roomMember)];
-     //   console.log(roomMember);
+        console.log(roomMember);
         var memberListInfo = [];
         getMultiUser(roomMember).then(
           (value)=>{
@@ -113,6 +121,8 @@ function getALL() {
                 }
               
             }
+            if (avat[1]==null) avat.push('./asset/image/defaultAvatar.jpg');
+            if (avat[2]==null) avat.push('./asset/image/defaultAvatar.jpg');
           }
           // set ten phong cho phong dau tien 
 
@@ -187,6 +197,7 @@ function getALL() {
             '<input type="hidden" id="custId2" name="iddd" value="'+chatID+'">'+
             "</td></tr>";
            
+          
             if (chatID == roomChatID) selectRoom();
           }
          
@@ -194,6 +205,8 @@ function getALL() {
         }
       
         // tin nhắn trong room
+        // obj for mess in room 
+ 
 
         sortTable();
         if (firstTime){
@@ -466,6 +479,15 @@ function socketUp() {
     }
     if (msg.type == "newMember"){ 
       getALL();
+      $('#listAddRoomModal').modal('hide');
+    }
+    if (msg.type == "deleteMember"){ 
+     
+      getALL();
+      $('#infoChatModal').modal('hide');
+    }
+    if (msg.type == "deleteRoom"){ 
+      window.location.href = "/chat";
     }
 });
 }
@@ -635,6 +657,13 @@ $(document).ready(function(){
     getUploadFile();
   });
 });
+$(document).ready(function(){
+  $("#btnroiphong").on('click',function(){
+    postDeleteMember(localStorage.username,roomChatID);
+    window.location.href = "/chat";
+  });
+});
+
 $(document).ready(function(){
   $("#videoUpload").on('change',function(){
     getUploadFileVideo();
@@ -808,6 +837,25 @@ function getStaterForInfoChat() {
      
       if (chatsListData.type == 0) {
         document.getElementById('infoChatNameHeader').innerHTML="";
+        document.getElementById('tableMemberBodyMD').innerHTML="";
+        var memberT = chatsListData.member;
+        for (var i in memberT){
+          const obj = infoMemberMain.data.filter(
+            (e) => e.username == memberT[i].username
+          )[0];
+          if (obj.avatar == "")
+          obj.avatar = "./asset/image/defaultAvatar.jpg"; 
+          //console.log(obj)
+          document.getElementById('tableMemberBodyMD').innerHTML +=
+          '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+          '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
+          '</a></td>'+
+          '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
+          '<td style="text-align: center;vertical-align: middle;"><td>'+
+          '</tr>';
+        
+          document.getElementById('footinfo').innerHTML ="";
+      }
       }else{
         document.getElementById('infoChatNameHeader').innerHTML=
         '<form  class="input-group">'+
@@ -815,27 +863,33 @@ function getStaterForInfoChat() {
         '<button type="button" class="btn btn-primary" onclick="postChangeName()" data-bs-dismiss="modal">Lưu</button>'+
         '</form>';
         document.getElementById('infoChatName').value=roomNameMain;
+        document.getElementById('tableMemberBodyMD').innerHTML="";
+        var memberT = chatsListData.member;
+        for (var i in memberT){
+          const obj = infoMemberMain.data.filter(
+            (e) => e.username == memberT[i].username
+          )[0];
+          if (obj.avatar == "")
+          obj.avatar = "./asset/image/defaultAvatar.jpg"; 
+          //console.log(obj)
+          document.getElementById('tableMemberBodyMD').innerHTML +=
+          '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+          '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
+          '</a></td>'+
+          '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
+          '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-danger" onclick=\"postDeleteMember(\''+obj.username+'\')" >Xóa khỏi phòng chat</button><td>'+
+          '</tr>';
+          document.getElementById('footinfo').innerHTML ="";
+          document.getElementById('footinfo').innerHTML +=
+          '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnroiphong">Rời khỏi phòng</button>'+
+          '<button type="button" class="btn btn-danger" data-bs-dismiss="modal" style = "margin-right: auto;" onclick="deleteRoom()">Xóa phòng</button>'+
+          '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng </button>';
+          
+          
+        }
       }
       
-      document.getElementById('tableMemberBodyMD').innerHTML="";
-      var memberT = chatsListData.member;
-      for (var i in memberT){
-        const obj = infoMemberMain.data.filter(
-          (e) => e.username == memberT[i].username
-        )[0];
-        if (obj.avatar == "")
-        obj.avatar = "./asset/image/defaultAvatar.jpg"; 
-        //console.log(obj)
-        document.getElementById('tableMemberBodyMD').innerHTML +=
-        '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
-        '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
-        '</a></td>'+
-        '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
-        '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-danger">Xóa khỏi phòng chat</button><td>'+
-        '</tr>';
-        
-        
-      }
+     
      
   
   };
@@ -1129,3 +1183,62 @@ function postAddMember(username){
    
  
  }
+
+ 
+function postDeleteMember(username){
+ 
+  $.ajax({
+      type: "POST",
+      url: host + endpoint.deleteMember,
+      data: JSON.stringify({
+        "roomID":roomChatID,
+        "username": username
+    }),
+      beforeSend: function (xhr) {
+        if (localStorage.token) {
+          xhr.setRequestHeader("jwt", localStorage.token);
+        }
+      },
+ 
+      error: function (e) {
+        alert(e.responseJSON);
+      },
+      success: function (data) {
+        
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+    
+  
+  }
+
+  
+function postDeleteRoom(){
+ 
+  $.ajax({
+      type: "POST",
+      url: host + endpoint.deleteRoom,
+      data: JSON.stringify({
+        "roomID":roomChatID
+    }),
+      beforeSend: function (xhr) {
+        if (localStorage.token) {
+          xhr.setRequestHeader("jwt", localStorage.token);
+        }
+      },
+ 
+      error: function (e) {
+        alert(e.responseJSON);
+      },
+      success: function (data) {
+        
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+    
+  
+  }
+
+  

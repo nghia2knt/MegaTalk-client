@@ -284,6 +284,59 @@
     </div>
     <div
     class="modal fade"
+    id="sendMessToModal"
+    tabindex="-1"
+    aria-labelledby="sendMessToModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sendMessToModalLabel">Đến:</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 " id = "sendMessToHeader">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h6 class="mb-2">Nội dung:</h6>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="contextMess"
+                  name="contextMessT"
+                />
+              </div>
+            </div>
+          </div>
+         
+        
+          
+        </div>
+       
+        <div class="modal-footer" id = "btnSendTo">
+          <button 
+         
+          type="button"
+          class="btn btn-primary"
+          onclick="postnewmess()"
+          >
+          Gửi
+          </button>
+        
+       
+          
+        </div>
+      </div>
+    </div>
+  </div>
+    <div
+    class="modal fade"
     id="changePasswordModal"
     tabindex="-1"
     aria-labelledby="changePassModal"

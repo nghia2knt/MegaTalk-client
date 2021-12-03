@@ -13,6 +13,7 @@ function kichHoat() {
           alert(e.responseJSON);
       },
       success: function(data) {
+          alert("Kích hoạt thành công.");
           window.location.href = "/dangnhap";
       },
       dataType: "json",

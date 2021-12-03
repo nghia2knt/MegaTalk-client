@@ -270,6 +270,16 @@ function getALL() {
                // console.log(messagesList[i]);
               //console.log(dataChat.username);
               if (!messagesList[i].recall){
+                if (messagesList[i].type==4){
+                  document.getElementById("tableChatbox").innerHTML +=
+                  '<tr class="messenger">'+
+                  '<td style="border:none"></td>'+
+                  '<td style="text-align:center;border:none">'+
+                  '<label class="fs-5" >'+ obj.username +  messagesList[i].content + '</label><br>'+  
+                  '<small>' + maskDate(messagesList[i].createAt) + "</small></label>" +
+                  "</label>" +
+                  '</td></tr>';
+                }
               if (obj.username!=localStorage.username){
                 if (messagesList[i].type==0){
                   document.getElementById("tableChatbox").innerHTML +=
@@ -1169,7 +1179,28 @@ function postAddMember(username){
        alert(e.responseJSON);
      },
      success: function (data) {
-       
+      $.ajax({
+        type: "POST",
+        url: host + endpoint.sendMessByRoomID,
+        data: JSON.stringify({
+          type: 4,
+          content: " đã thêm " + username +" vào nhóm.",
+          roomID: roomChatID,
+        }),
+        beforeSend: function (xhr) {
+          if (localStorage.token) {
+            xhr.setRequestHeader("jwt", localStorage.token);
+          }
+        },
+        error: function (e) {
+          alert(e.responseJSON);
+        },
+        success: function (data) {
+        
+        },
+        dataType: "json",
+        contentType: "application/json",
+      });
      },
      dataType: "json",
      contentType: "application/json",
@@ -1198,7 +1229,28 @@ function postDeleteMember(username){
         alert(e.responseJSON);
       },
       success: function (data) {
-        
+        $.ajax({
+          type: "POST",
+          url: host + endpoint.sendMessByRoomID,
+          data: JSON.stringify({
+            type: 4,
+            content: " đã xóa " + username +" khỏi nhóm.",
+            roomID: roomChatID,
+          }),
+          beforeSend: function (xhr) {
+            if (localStorage.token) {
+              xhr.setRequestHeader("jwt", localStorage.token);
+            }
+          },
+          error: function (e) {
+            alert(e.responseJSON);
+          },
+          success: function (data) {
+          
+          },
+          dataType: "json",
+          contentType: "application/json",
+        });
       },
       dataType: "json",
       contentType: "application/json",

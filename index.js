@@ -39,6 +39,6 @@ app.get("/test", (req, res) => {
   return res.render("chattest");
 });
 
-app.listen(3000, () => {
+app.listen(8080, () => {
   console.log("SV is running!!!");
 });

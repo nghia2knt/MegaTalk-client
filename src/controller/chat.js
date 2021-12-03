@@ -520,8 +520,9 @@ function changeID(id,roomname) {
  // getALL();
 }
 function sendMess() {
-  if (content != "") {
   var content = $('input[name="messArea"]').val();
+  if (content != "") {
+  
   var roomID = roomChatID;
   document.getElementById("messArea").value = "";
   document.getElementById("tableChatbox").innerHTML +=
@@ -876,17 +877,28 @@ function getStaterForInfoChat() {
           if (obj.avatar == "")
           obj.avatar = "./asset/image/defaultAvatar.jpg"; 
           //console.log(obj)
-          document.getElementById('tableMemberBodyMD').innerHTML +=
-          '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
-          '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
-          '</a></td>'+
-          '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
-          '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-danger" onclick=\"postDeleteMember(\''+obj.username+'\')" >Xóa khỏi phòng chat</button><td>'+
-          '</tr>';
+          if (obj.username!=localStorage.username){
+            document.getElementById('tableMemberBodyMD').innerHTML +=
+            '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+            '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
+            '</a></td>'+
+            '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
+            '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-danger" onclick=\"this.disabled=true;postDeleteMember(\''+obj.username+'\')" >Xóa khỏi phòng chat</button><td>'+
+            '</tr>';
+          }else{
+            document.getElementById('tableMemberBodyMD').innerHTML +=
+            '<tr><td><a href="#" title="" data-bs-toggle="modal" data-bs-target="#infoAnotherModal" onclick=\"getProfileAnother(\''+obj.username+'\')" class="iconHV">'+
+            '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
+            '</a></td>'+
+            '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
+            '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-danger" onclick=\"this.disabled=true;deleteSelf()" >Rời khỏi phòng</button><td>'+
+            '</tr>';
+          }
+  
           document.getElementById('footinfo').innerHTML ="";
           document.getElementById('footinfo').innerHTML +=
-          '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnroiphong" onclick="deleteSelf()">Rời khỏi phòng</button>'+
-          '<button type="button" class="btn btn-danger" data-bs-dismiss="modal" style = "margin-right: auto;" onclick="postDeleteRoom()">Xóa phòng</button>'+
+          '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnroiphong" onclick="this.disabled=true;deleteSelf()">Rời khỏi phòng</button>'+
+          '<button type="button" class="btn btn-danger" data-bs-dismiss="modal" style = "margin-right: auto;" onclick="this.disabled=true;postDeleteRoom()">Xóa phòng</button>'+
           '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng </button>';
           
           
@@ -1147,7 +1159,7 @@ function getStaterForAddMember() {
           '<img src="'+obj.avatar+'" alt="Avatar" class="avatar"></td><td  style="text-align: left;">' +
           '</a></td>'+
           '<td style="text-align: center;vertical-align: middle;">'+obj.name+'<br>('+obj.username+')<td>'+
-          '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-primary" onclick=\"postAddMember(\''+obj.username+'\')" >Thêm vào phòng</button><td>'+
+          '<td style="text-align: center;vertical-align: middle;"><button class="btn btn-primary" onclick=\"this.disabled=true;postAddMember(\''+obj.username+'\')" >Thêm vào phòng</button><td>'+
           '</tr>';
           
           
@@ -1211,7 +1223,6 @@ function postAddMember(username){
 
  
 function postDeleteMember(username){
- 
   $.ajax({
       type: "POST",
       url: host + endpoint.deleteMember,
@@ -1229,28 +1240,31 @@ function postDeleteMember(username){
         alert(e.responseJSON);
       },
       success: function (data) {
-        $.ajax({
-          type: "POST",
-          url: host + endpoint.sendMessByRoomID,
-          data: JSON.stringify({
-            type: 4,
-            content: " đã xóa " + username +" khỏi nhóm.",
-            roomID: roomChatID,
-          }),
-          beforeSend: function (xhr) {
-            if (localStorage.token) {
-              xhr.setRequestHeader("jwt", localStorage.token);
-            }
-          },
-          error: function (e) {
-            alert(e.responseJSON);
-          },
-          success: function (data) {
-          
-          },
-          dataType: "json",
-          contentType: "application/json",
-        });
+        if (username!=localStorage.username){
+          $.ajax({
+            type: "POST",
+            url: host + endpoint.sendMessByRoomID,
+            data: JSON.stringify({
+              type: 4,
+              content: " đã xóa " + username +" khỏi nhóm.",
+              roomID: roomChatID,
+            }),
+            beforeSend: function (xhr) {
+              if (localStorage.token) {
+                xhr.setRequestHeader("jwt", localStorage.token);
+              }
+            },
+            error: function (e) {
+              alert(e.responseJSON);
+            },
+            success: function (data) {
+            
+            },
+            dataType: "json",
+            contentType: "application/json",
+          });
+        }
+        
       },
       dataType: "json",
       contentType: "application/json",
@@ -1288,7 +1302,29 @@ function postDeleteRoom(){
   }
 
   function deleteSelf(){
-    postDeleteMember(localStorage.username);
+    $.ajax({
+      type: "POST",
+      url: host + endpoint.sendMessByRoomID,
+      data: JSON.stringify({
+        type: 4,
+        content: " đã xóa " + localStorage.username +" khỏi nhóm.",
+        roomID: roomChatID,
+      }),
+      beforeSend: function (xhr) {
+        if (localStorage.token) {
+          xhr.setRequestHeader("jwt", localStorage.token);
+        }
+      },
+      error: function (e) {
+        alert(e.responseJSON);
+      },
+      success: function (data) {
+        postDeleteMember(localStorage.username);
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+    
    
   }
 

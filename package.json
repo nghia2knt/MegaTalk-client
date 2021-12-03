@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon start"
+    "start": "nodemon start",
+    "startpm2": "pm2 start ./index.js",
+    "stoppm2": "pm2 stop ./index.js",
+    "deletepm2": "pm2 delete ./index.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +16,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "nodemon": "^2.0.14",
+    "pm2": "^5.1.0",
     "socket.io-client": "^4.3.2"
   }
 }
